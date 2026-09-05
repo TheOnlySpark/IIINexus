@@ -1,0 +1,8 @@
+{
+    "name": "III Nexus ",
+    "description": "A central launcher for college sub-apps including Clubspace, Canteen, AI Content Detector, and Skiptray.",
+    "requestFramePermissions": [],
+    "majorCapabilities": [
+        "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+    ]
+}
