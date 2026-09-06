@@ -3,7 +3,9 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabaseClient';
-import SignUpModal from '@/components/SignUpModal';
+import dynamic from 'next/dynamic';
+
+const SignUpModal = dynamic(() => import('@/components/SignUpModal'), { ssr: false });
 
 export default function Page() {
   const router = useRouter();
