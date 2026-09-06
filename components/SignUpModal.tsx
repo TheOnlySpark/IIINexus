@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { X } from 'lucide-react';
+import { X, Mail } from 'lucide-react';
 import { supabase } from '@/lib/supabaseClient';
 
 interface SignUpModalProps {
@@ -100,7 +100,7 @@ export default function SignUpModal({ isOpen, onClose }: SignUpModalProps) {
             {success ? (
               <div className="flex flex-col items-center justify-center py-8 text-center space-y-4">
                 <div className="w-16 h-16 bg-green-400 border-4 border-black rounded-full flex items-center justify-center shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
-                  <span className="text-3xl">📧</span>
+                  <Mail className="w-8 h-8 text-black" strokeWidth={2.5} />
                 </div>
                 <h3 className="text-2xl font-black uppercase">Check Your Email</h3>
                 <p className="text-slate-600 font-medium">
