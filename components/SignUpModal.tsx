@@ -51,6 +51,7 @@ export default function SignUpModal({ isOpen, onClose }: SignUpModalProps) {
         email: formData.email,
         password: formData.password,
         options: {
+          emailRedirectTo: `${window.location.origin}/dashboard`,
           data: {
             full_name: formData.name,
             reg_no: formData.regNo,
