@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabaseClient';
 
 const APPS = [
-  { id: 'app1', name: 'Placeholder App 1', description: 'Placeholder description for the first app module.', url: '#', short: 'P1' },
+  { id: 'slot-booking', name: 'Slot Booking', description: 'Book one of the VISTAS Amenities now!', url: 'https://campusslotbooking.vercel.app', short: 'SB' },
   { id: 'skiptray', name: 'SkipTray', description: 'In-House pre-ordering app for the ground floor canteen', url: 'https://vistas-skiptray.vercel.app', short: 'ST' },
   { id: 'app2', name: 'Placeholder App 2', description: 'Placeholder description for the second app module.', url: '#', short: 'P2' },
   { id: 'app3', name: 'Placeholder App 3', description: 'Placeholder description for the third app module.', url: '#', short: 'P3' },
