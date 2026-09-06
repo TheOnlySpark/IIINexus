@@ -59,26 +59,26 @@ export default function Page() {
   };
 
   return (
-    <main className="flex flex-col min-h-screen items-center justify-center p-4 sm:p-6">
-      <div className="w-full max-w-md bg-white border-2 border-black rounded-2xl p-6 sm:p-8 flex flex-col relative shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
+    <main className="flex flex-col min-h-screen items-center justify-center p-4 sm:p-6 bg-slate-50">
+      <div className="w-full max-w-md bg-white border border-slate-100 rounded-[2rem] p-6 sm:p-8 flex flex-col relative shadow-xl">
         
         <div className="mb-8">
-          <div className="w-12 h-12 bg-[#4f46e5] border-2 border-black rounded-xl flex items-center justify-center mb-6 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
-            <div className="w-5 h-5 border-2 border-black rotate-45"></div>
+          <div className="w-12 h-12 bg-indigo-600 rounded-2xl flex items-center justify-center mb-6 shadow-sm">
+            <div className="w-5 h-5 border-2 border-white rotate-45 rounded-sm"></div>
           </div>
-          <h1 className="text-4xl font-black uppercase leading-none mb-2 tracking-tight">III Nexus</h1>
+          <h1 className="text-3xl font-black uppercase leading-none mb-2 tracking-tight text-slate-900">III Nexus</h1>
           <p className="text-slate-500 font-medium text-sm">Please sign in to access your workspace applications.</p>
         </div>
 
         <form onSubmit={handleLogin} className="flex flex-col gap-5">
           {error && (
-            <div className="bg-red-50 border-2 border-black text-red-600 p-4 rounded-xl text-sm font-bold shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+            <div className="bg-rose-50 text-rose-600 p-4 rounded-xl text-sm font-bold border border-rose-100">
               {error}
             </div>
           )}
           
           <div className="flex flex-col gap-2">
-            <label className="text-xs font-black uppercase tracking-tighter text-slate-900" htmlFor="email">
+            <label className="text-[11px] font-black uppercase tracking-widest text-slate-500" htmlFor="email">
               Member Email
             </label>
             <input
@@ -87,13 +87,13 @@ export default function Page() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              className="w-full border-2 border-black rounded-xl p-3 bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#4f46e5] transition-colors font-medium text-black placeholder:text-slate-400"
+              className="w-full border border-slate-200 rounded-xl p-3 bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:border-indigo-600 transition-colors font-medium text-slate-900 placeholder:text-slate-400"
               placeholder="member@iiinexus.org"
             />
           </div>
 
           <div className="flex flex-col gap-2">
-            <label className="text-xs font-black uppercase tracking-tighter text-slate-900" htmlFor="password">
+            <label className="text-[11px] font-black uppercase tracking-widest text-slate-500" htmlFor="password">
               Password
             </label>
             <input
@@ -102,7 +102,7 @@ export default function Page() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              className="w-full border-2 border-black rounded-xl p-3 bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#4f46e5] transition-colors font-medium text-black placeholder:text-slate-400"
+              className="w-full border border-slate-200 rounded-xl p-3 bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:border-indigo-600 transition-colors font-medium text-slate-900 placeholder:text-slate-400"
               placeholder="••••••••"
             />
           </div>
@@ -110,17 +110,17 @@ export default function Page() {
           <button
             type="submit"
             disabled={loading}
-            className="mt-4 w-full bg-[#4f46e5] text-white border-2 border-black rounded-xl py-4 font-black uppercase tracking-widest hover:bg-[#4338ca] active:translate-y-1 active:translate-x-1 active:shadow-[0px_0px_0px_0px_rgba(0,0,0,1)] shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-transform disabled:opacity-50 disabled:cursor-not-allowed disabled:active:translate-y-0 disabled:active:translate-x-0 disabled:active:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]"
+            className="mt-4 w-full bg-indigo-600 text-white rounded-xl py-3.5 font-bold uppercase tracking-wider hover:bg-indigo-700 active:scale-95 shadow-md hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:active:scale-100"
           >
             {loading ? 'Signing in...' : 'Sign In'}
           </button>
         </form>
 
-        <div className="mt-8 pt-6 border-t-2 border-black/10 flex flex-col items-center gap-3">
-          <p className="text-sm font-bold text-slate-500">Don't have an account?</p>
+        <div className="mt-8 pt-6 border-t border-slate-100 flex flex-col items-center gap-4">
+          <p className="text-sm font-medium text-slate-500">Don't have an account?</p>
           <button 
             onClick={() => setIsSignUpOpen(true)}
-            className="w-full bg-white text-black border-2 border-black rounded-xl py-3 font-black uppercase tracking-widest hover:bg-slate-50 active:translate-y-1 active:translate-x-1 active:shadow-[0px_0px_0px_0px_rgba(0,0,0,1)] shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-transform"
+            className="w-full bg-white text-slate-700 border border-slate-200 rounded-xl py-3.5 font-bold uppercase tracking-wider hover:bg-slate-50 active:scale-95 shadow-sm hover:shadow-md transition-all"
           >
             Create Account
           </button>
@@ -130,13 +130,13 @@ export default function Page() {
       <SignUpModal isOpen={isSignUpOpen} onClose={() => setIsSignUpOpen(false)} />
       
       {/* Footer */}
-      <footer className="mt-12 flex flex-col items-center justify-center text-xs font-bold text-slate-500 uppercase gap-3">
+      <footer className="mt-12 flex flex-col items-center justify-center text-[11px] font-bold text-slate-400 uppercase tracking-widest gap-3">
         <div className="flex gap-4">
-          <a href="/privacy" className="hover:text-black hover:underline transition-colors">Privacy Policy</a>
+          <a href="/privacy" className="hover:text-slate-700 transition-colors">Privacy Policy</a>
           <span>&bull;</span>
-          <a href="/terms" className="hover:text-black hover:underline transition-colors">Terms of Service</a>
+          <a href="/terms" className="hover:text-slate-700 transition-colors">Terms of Service</a>
           <span>&bull;</span>
-          <a href="/legal" className="hover:text-black hover:underline transition-colors">Legal</a>
+          <a href="/legal" className="hover:text-slate-700 transition-colors">Legal</a>
         </div>
         <div>&copy; {new Date().getFullYear()} III Nexus. All rights reserved.</div>
       </footer>

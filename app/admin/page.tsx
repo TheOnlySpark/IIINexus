@@ -171,8 +171,8 @@ export default function AdminDashboard() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[#f0f2f5]">
-        <div className="font-black uppercase tracking-widest text-slate-400 animate-pulse">
+      <div className="min-h-screen flex items-center justify-center bg-slate-50">
+        <div className="text-[11px] font-bold uppercase tracking-widest text-slate-400 animate-pulse">
           Authenticating Admin...
         </div>
       </div>
@@ -180,15 +180,15 @@ export default function AdminDashboard() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#f0f2f5] p-6 text-slate-900 font-sans">
-      <header className="h-16 border-4 border-black bg-[#eab308] flex items-center justify-between px-6 shrink-0 rounded-2xl shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] mb-8 max-w-6xl mx-auto w-full">
+    <div className="min-h-screen flex flex-col bg-slate-50 p-4 sm:p-6 text-slate-900 font-sans">
+      <header className="h-16 bg-slate-900 text-white flex items-center justify-between px-6 shrink-0 rounded-2xl shadow-md mb-4 max-w-6xl mx-auto w-full">
         <div className="flex items-center gap-3">
-          <ShieldAlert className="w-8 h-8 text-black" strokeWidth={2.5} />
+          <ShieldAlert className="w-6 h-6 text-indigo-400" strokeWidth={2.5} />
           <span className="font-black text-xl tracking-tight uppercase">Nexus Admin</span>
         </div>
         <Link
           href="/dashboard"
-          className="px-4 py-2 bg-white text-black border-2 border-black text-xs font-bold uppercase rounded-lg hover:bg-slate-100 active:translate-y-1 active:translate-x-1 active:shadow-none transition-transform shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]"
+          className="px-4 py-2 bg-slate-800 text-white text-[11px] font-bold uppercase tracking-wider rounded-lg hover:bg-slate-700 active:scale-95 transition-all shadow-sm border border-slate-700"
         >
           Exit Admin
         </Link>
@@ -197,57 +197,57 @@ export default function AdminDashboard() {
       <main className="flex-1 max-w-6xl mx-auto w-full flex flex-col md:flex-row gap-8">
         
         {/* Sidebar Nav */}
-        <nav className="w-full md:w-64 flex flex-col gap-4 shrink-0">
+        <nav className="w-full md:w-56 flex flex-col gap-3 shrink-0">
           <button 
             onClick={() => setActiveTab('apps')}
-            className={`flex items-center gap-3 px-5 py-4 border-4 border-black rounded-xl font-black uppercase tracking-wider transition-transform active:translate-y-1 active:translate-x-1 active:shadow-none ${activeTab === 'apps' ? 'bg-black text-white shadow-none translate-x-1 translate-y-1' : 'bg-white text-black hover:bg-slate-50 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]'}`}
+            className={`flex items-center gap-3 px-5 py-3.5 rounded-xl font-bold uppercase tracking-wider text-[11px] transition-all active:scale-95 ${activeTab === 'apps' ? 'bg-indigo-50 text-indigo-700 shadow-sm border border-indigo-100' : 'bg-white text-slate-600 hover:bg-slate-50 border border-slate-200 hover:border-slate-300 shadow-sm'}`}
           >
-            <LayoutGrid className="w-5 h-5" />
+            <LayoutGrid className="w-5 h-5" strokeWidth={2.5} />
             Modules
           </button>
           <button 
             onClick={() => setActiveTab('announcements')}
-            className={`flex items-center gap-3 px-5 py-4 border-4 border-black rounded-xl font-black uppercase tracking-wider transition-transform active:translate-y-1 active:translate-x-1 active:shadow-none ${activeTab === 'announcements' ? 'bg-black text-white shadow-none translate-x-1 translate-y-1' : 'bg-white text-black hover:bg-slate-50 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]'}`}
+            className={`flex items-center gap-3 px-5 py-3.5 rounded-xl font-bold uppercase tracking-wider text-[11px] transition-all active:scale-95 ${activeTab === 'announcements' ? 'bg-indigo-50 text-indigo-700 shadow-sm border border-indigo-100' : 'bg-white text-slate-600 hover:bg-slate-50 border border-slate-200 hover:border-slate-300 shadow-sm'}`}
           >
-            <Megaphone className="w-5 h-5" />
+            <Megaphone className="w-5 h-5" strokeWidth={2.5} />
             Banners
           </button>
           <button 
             onClick={() => setActiveTab('analytics')}
-            className={`flex items-center gap-3 px-5 py-4 border-4 border-black rounded-xl font-black uppercase tracking-wider transition-transform active:translate-y-1 active:translate-x-1 active:shadow-none ${activeTab === 'analytics' ? 'bg-black text-white shadow-none translate-x-1 translate-y-1' : 'bg-white text-black hover:bg-slate-50 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]'}`}
+            className={`flex items-center gap-3 px-5 py-3.5 rounded-xl font-bold uppercase tracking-wider text-[11px] transition-all active:scale-95 ${activeTab === 'analytics' ? 'bg-indigo-50 text-indigo-700 shadow-sm border border-indigo-100' : 'bg-white text-slate-600 hover:bg-slate-50 border border-slate-200 hover:border-slate-300 shadow-sm'}`}
           >
-            <BarChart3 className="w-5 h-5" />
+            <BarChart3 className="w-5 h-5" strokeWidth={2.5} />
             Analytics
           </button>
         </nav>
 
         {/* Content Area */}
-        <div className="flex-1 bg-white border-4 border-black rounded-2xl shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] p-6 sm:p-8">
+        <div className="flex-1 bg-white border border-slate-100 rounded-[2rem] shadow-xl p-6 sm:p-8">
           
           {/* APPS TAB */}
           {activeTab === 'apps' && (
             <div className="flex flex-col gap-8">
               <div>
-                <h2 className="text-2xl font-black uppercase tracking-tight mb-2">Module Manager</h2>
+                <h2 className="text-2xl font-black uppercase tracking-tight mb-2 text-slate-900">Module Manager</h2>
                 <p className="text-slate-500 font-medium text-sm">Add, edit, or disable apps on the student dashboard.</p>
               </div>
 
-              <form onSubmit={saveApp} className="bg-slate-50 border-4 border-black border-dashed rounded-xl p-6 flex flex-col gap-4">
-                <h3 className="font-black uppercase tracking-widest text-sm">{editingApp ? 'Edit Module' : 'Add New Module'}</h3>
+              <form onSubmit={saveApp} className="bg-slate-50 border border-slate-200 border-dashed rounded-2xl p-6 flex flex-col gap-4">
+                <h3 className="font-bold uppercase tracking-widest text-[11px] text-slate-500">{editingApp ? 'Edit Module' : 'Add New Module'}</h3>
                 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <input required placeholder="App Name" className="border-2 border-black rounded-lg p-3 font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-[#4f46e5]" value={editingApp ? editingApp.name : newApp.name} onChange={(e) => editingApp ? setEditingApp({...editingApp, name: e.target.value}) : setNewApp({...newApp, name: e.target.value})} />
-                  <input required placeholder="Short Icon (e.g. BMS)" maxLength={4} className="border-2 border-black rounded-lg p-3 font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-[#4f46e5]" value={editingApp ? editingApp.short_icon : newApp.short_icon} onChange={(e) => editingApp ? setEditingApp({...editingApp, short_icon: e.target.value}) : setNewApp({...newApp, short_icon: e.target.value})} />
+                  <input required placeholder="App Name" className="border border-slate-200 rounded-xl p-3 bg-white font-medium text-slate-900 placeholder:text-slate-400 transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:border-indigo-600" value={editingApp ? editingApp.name : newApp.name} onChange={(e) => editingApp ? setEditingApp({...editingApp, name: e.target.value}) : setNewApp({...newApp, name: e.target.value})} />
+                  <input required placeholder="Short Icon (e.g. BMS)" maxLength={4} className="border border-slate-200 rounded-xl p-3 bg-white font-medium text-slate-900 placeholder:text-slate-400 transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:border-indigo-600" value={editingApp ? editingApp.short_icon : newApp.short_icon} onChange={(e) => editingApp ? setEditingApp({...editingApp, short_icon: e.target.value}) : setNewApp({...newApp, short_icon: e.target.value})} />
                 </div>
-                <input required placeholder="URL (e.g. https://campusslotbooking.vercel.app)" type="url" className="border-2 border-black rounded-lg p-3 font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-[#4f46e5]" value={editingApp ? editingApp.url : newApp.url} onChange={(e) => editingApp ? setEditingApp({...editingApp, url: e.target.value}) : setNewApp({...newApp, url: e.target.value})} />
-                <textarea required placeholder="Short Description" className="border-2 border-black rounded-lg p-3 font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-[#4f46e5]" value={editingApp ? editingApp.description : newApp.description} onChange={(e) => editingApp ? setEditingApp({...editingApp, description: e.target.value}) : setNewApp({...newApp, description: e.target.value})} />
+                <input required placeholder="URL (e.g. https://campusslotbooking.vercel.app)" type="url" className="border border-slate-200 rounded-xl p-3 bg-white font-medium text-slate-900 placeholder:text-slate-400 transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:border-indigo-600" value={editingApp ? editingApp.url : newApp.url} onChange={(e) => editingApp ? setEditingApp({...editingApp, url: e.target.value}) : setNewApp({...newApp, url: e.target.value})} />
+                <textarea required placeholder="Short Description" className="border border-slate-200 rounded-xl p-3 bg-white font-medium text-slate-900 placeholder:text-slate-400 transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:border-indigo-600" value={editingApp ? editingApp.description : newApp.description} onChange={(e) => editingApp ? setEditingApp({...editingApp, description: e.target.value}) : setNewApp({...newApp, description: e.target.value})} />
                 
-                <div className="flex gap-4">
-                  <button type="submit" className="bg-[#4f46e5] text-white px-6 py-3 border-2 border-black rounded-xl font-black uppercase tracking-widest hover:bg-[#4338ca] active:translate-y-1 active:translate-x-1 active:shadow-none shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-transform">
+                <div className="flex gap-4 pt-2">
+                  <button type="submit" className="bg-indigo-600 text-white px-6 py-3 rounded-xl font-bold uppercase tracking-wider text-[11px] hover:bg-indigo-700 active:scale-95 shadow-md transition-all">
                     {editingApp ? 'Save Changes' : 'Publish App'}
                   </button>
                   {editingApp && (
-                    <button type="button" onClick={() => setEditingApp(null)} className="bg-white text-black px-6 py-3 border-2 border-black rounded-xl font-black uppercase tracking-widest hover:bg-slate-100 active:translate-y-1 active:translate-x-1 active:shadow-none shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-transform">
+                    <button type="button" onClick={() => setEditingApp(null)} className="bg-white text-slate-700 px-6 py-3 border border-slate-200 rounded-xl font-bold uppercase tracking-wider text-[11px] hover:bg-slate-50 active:scale-95 shadow-sm transition-all">
                       Cancel
                     </button>
                   )}
@@ -256,24 +256,24 @@ export default function AdminDashboard() {
 
               <div className="grid grid-cols-1 gap-4">
                 {apps.map(app => (
-                  <div key={app.id} className={`border-4 border-black rounded-xl p-4 flex items-center justify-between ${app.is_active ? 'bg-white' : 'bg-slate-100 opacity-70'}`}>
+                  <div key={app.id} className={`border border-slate-200 rounded-2xl p-5 flex flex-col sm:flex-row gap-4 justify-between items-start sm:items-center ${app.is_active ? 'bg-white shadow-sm hover:shadow-md transition-all' : 'bg-slate-50 opacity-70'}`}>
                     <div>
-                      <div className="flex items-center gap-3 mb-1">
-                        <span className="bg-black text-white text-xs font-black px-2 py-1 rounded">{app.short_icon}</span>
-                        <h4 className="font-black uppercase tracking-tight text-lg">{app.name}</h4>
-                        {!app.is_active && <span className="bg-red-500 text-white text-xs font-black uppercase px-2 py-1 rounded tracking-widest">Hidden</span>}
+                      <div className="flex items-center gap-3 mb-2">
+                        <span className="bg-indigo-50 text-indigo-700 text-[10px] font-black px-2 py-1 rounded-md tracking-wider">{app.short_icon}</span>
+                        <h4 className="font-black uppercase tracking-tight text-lg text-slate-900">{app.name}</h4>
+                        {!app.is_active && <span className="bg-rose-100 text-rose-700 text-[10px] font-bold uppercase px-2 py-1 rounded-md tracking-widest">Hidden</span>}
                       </div>
                       <p className="text-sm font-medium text-slate-500 truncate max-w-xs sm:max-w-md">{app.url}</p>
                     </div>
-                    <div className="flex items-center gap-2">
-                      <button onClick={() => toggleAppActive(app.id, app.is_active)} className="p-2 border-2 border-black rounded-lg hover:bg-slate-100 transition-colors">
-                        {app.is_active ? <Check className="w-5 h-5 text-green-600" /> : <X className="w-5 h-5 text-red-600" />}
+                    <div className="flex items-center gap-1">
+                      <button onClick={() => toggleAppActive(app.id, app.is_active)} className="p-2 text-slate-400 hover:text-slate-700 hover:bg-slate-100 rounded-xl transition-colors">
+                        {app.is_active ? <Check className="w-5 h-5 text-emerald-600" /> : <X className="w-5 h-5 text-rose-600" />}
                       </button>
-                      <button onClick={() => setEditingApp(app)} className="p-2 border-2 border-black rounded-lg hover:bg-slate-100 transition-colors">
-                        <Edit2 className="w-5 h-5 text-blue-600" />
+                      <button onClick={() => setEditingApp(app)} className="p-2 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-xl transition-colors">
+                        <Edit2 className="w-5 h-5" />
                       </button>
-                      <button onClick={() => deleteApp(app.id)} className="p-2 border-2 border-black rounded-lg hover:bg-red-100 transition-colors">
-                        <Trash2 className="w-5 h-5 text-red-600" />
+                      <button onClick={() => deleteApp(app.id)} className="p-2 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-xl transition-colors">
+                        <Trash2 className="w-5 h-5" />
                       </button>
                     </div>
                   </div>
@@ -286,37 +286,37 @@ export default function AdminDashboard() {
           {activeTab === 'announcements' && (
             <div className="flex flex-col gap-8">
               <div>
-                <h2 className="text-2xl font-black uppercase tracking-tight mb-2">Global Banners</h2>
+                <h2 className="text-2xl font-black uppercase tracking-tight mb-2 text-slate-900">Global Banners</h2>
                 <p className="text-slate-500 font-medium text-sm">Push urgent announcements to the top of everyone's dashboard.</p>
               </div>
 
-              <form onSubmit={postAnnouncement} className="bg-[#facc15]/20 border-4 border-[#facc15] border-dashed rounded-xl p-6 flex flex-col gap-4">
-                <h3 className="font-black uppercase tracking-widest text-sm text-[#ca8a04]">New Announcement</h3>
-                <textarea required placeholder="Type your message here..." className="border-2 border-black rounded-lg p-3 font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-[#facc15]" value={newAnnouncement} onChange={(e) => setNewAnnouncement(e.target.value)} />
-                <button type="submit" className="bg-[#eab308] text-black px-6 py-3 border-2 border-black rounded-xl font-black uppercase tracking-widest hover:bg-[#ca8a04] active:translate-y-1 active:translate-x-1 active:shadow-none shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-transform self-start">
+              <form onSubmit={postAnnouncement} className="bg-amber-50/50 border border-amber-200 border-dashed rounded-2xl p-6 flex flex-col gap-4">
+                <h3 className="font-bold uppercase tracking-widest text-[11px] text-amber-700">New Announcement</h3>
+                <textarea required placeholder="Type your message here..." className="border border-slate-200 rounded-xl p-3 bg-white font-medium text-slate-900 placeholder:text-slate-400 transition-colors focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500" value={newAnnouncement} onChange={(e) => setNewAnnouncement(e.target.value)} />
+                <button type="submit" className="bg-amber-500 text-white px-6 py-3 rounded-xl font-bold uppercase tracking-wider text-[11px] hover:bg-amber-600 active:scale-95 shadow-md transition-all self-start">
                   Broadcast Banner
                 </button>
               </form>
 
               <div className="flex flex-col gap-4">
                 {announcements.map(ann => (
-                  <div key={ann.id} className={`border-2 border-black rounded-xl p-4 flex flex-col sm:flex-row gap-4 justify-between items-start sm:items-center ${ann.is_active ? 'bg-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]' : 'bg-slate-50 opacity-60'}`}>
+                  <div key={ann.id} className={`border border-slate-200 rounded-2xl p-5 flex flex-col sm:flex-row gap-4 justify-between items-start sm:items-center ${ann.is_active ? 'bg-white shadow-sm hover:shadow-md transition-all' : 'bg-slate-50 opacity-60'}`}>
                     <div className="flex flex-col gap-1">
-                      {ann.is_active && <span className="bg-[#facc15] text-black text-xs font-black uppercase tracking-widest px-2 py-1 rounded w-fit mb-1">Live Right Now</span>}
-                      <p className="font-bold text-slate-800">{ann.message}</p>
+                      {ann.is_active && <span className="bg-amber-100 text-amber-800 text-[10px] font-bold uppercase tracking-widest px-2 py-1 rounded-md w-fit mb-2">Live Right Now</span>}
+                      <p className="font-bold text-slate-900">{ann.message}</p>
                       <p className="text-xs font-medium text-slate-400">{new Date(ann.created_at).toLocaleString()}</p>
                     </div>
                     <div className="flex items-center gap-2 shrink-0">
-                      <button onClick={() => toggleAnnouncement(ann.id, ann.is_active)} className="px-4 py-2 border-2 border-black rounded-lg font-black uppercase text-xs tracking-widest hover:bg-slate-100 transition-colors">
+                      <button onClick={() => toggleAnnouncement(ann.id, ann.is_active)} className="px-4 py-2 border border-slate-200 rounded-xl font-bold uppercase text-[10px] tracking-widest hover:bg-slate-50 transition-colors active:scale-95 text-slate-600">
                         {ann.is_active ? 'Disable' : 'Set Active'}
                       </button>
-                      <button onClick={() => deleteAnnouncement(ann.id)} className="p-2 border-2 border-black rounded-lg hover:bg-red-100 transition-colors">
-                        <Trash2 className="w-5 h-5 text-red-600" />
+                      <button onClick={() => deleteAnnouncement(ann.id)} className="p-2 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-xl transition-colors">
+                        <Trash2 className="w-5 h-5" />
                       </button>
                     </div>
                   </div>
                 ))}
-                {announcements.length === 0 && <p className="text-slate-500 font-bold">No announcements yet.</p>}
+                {announcements.length === 0 && <p className="text-[11px] font-bold text-slate-400 uppercase tracking-widest">No announcements yet.</p>}
               </div>
             </div>
           )}
@@ -325,28 +325,28 @@ export default function AdminDashboard() {
           {activeTab === 'analytics' && (
             <div className="flex flex-col gap-8">
               <div>
-                <h2 className="text-2xl font-black uppercase tracking-tight mb-2">Usage Analytics</h2>
+                <h2 className="text-2xl font-black uppercase tracking-tight mb-2 text-slate-900">Usage Analytics</h2>
                 <p className="text-slate-500 font-medium text-sm">See which modules are driving the most engagement.</p>
               </div>
 
               {analytics.length === 0 ? (
-                <div className="p-8 border-4 border-black border-dashed rounded-2xl text-center text-slate-500 font-bold uppercase tracking-widest bg-slate-50">
+                <div className="p-8 border border-slate-200 border-dashed rounded-2xl text-center text-slate-400 font-bold uppercase tracking-widest text-[11px] bg-slate-50">
                   No clicks recorded yet.
                 </div>
               ) : (
                 <div className="flex flex-col gap-4">
                   {analytics.sort((a,b) => b.clicks - a.clicks).map((item, index) => (
-                    <div key={index} className="border-4 border-black rounded-xl p-4 flex items-center justify-between bg-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] relative overflow-hidden">
-                      {/* Fake progress bar background for visual flair */}
-                      <div className="absolute top-0 left-0 bottom-0 bg-[#4f46e5]/10 z-0" style={{ width: `${Math.min(100, (item.clicks / analytics[0].clicks) * 100)}%` }}></div>
+                    <div key={index} className="border border-slate-100 rounded-2xl p-5 flex items-center justify-between bg-white shadow-sm hover:shadow-md transition-all relative overflow-hidden">
+                      {/* Gentle progress bar background for visual flair */}
+                      <div className="absolute top-0 left-0 bottom-0 bg-indigo-50 z-0 transition-all duration-1000" style={{ width: `${Math.min(100, (item.clicks / analytics[0].clicks) * 100)}%` }}></div>
                       
                       <div className="relative z-10 flex items-center gap-4">
-                        <span className="font-black text-2xl text-slate-300">#{index + 1}</span>
-                        <h4 className="font-black uppercase tracking-tight text-xl">{item.app_name}</h4>
+                        <span className="font-black text-2xl text-slate-200">#{index + 1}</span>
+                        <h4 className="font-black uppercase tracking-tight text-lg text-slate-900">{item.app_name}</h4>
                       </div>
                       <div className="relative z-10 flex flex-col items-end">
-                        <span className="font-black text-3xl">{item.clicks}</span>
-                        <span className="text-xs font-black uppercase tracking-widest text-slate-500">Total Clicks</span>
+                        <span className="font-black text-3xl text-indigo-600 leading-none">{item.clicks}</span>
+                        <span className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mt-1">Total Clicks</span>
                       </div>
                     </div>
                   ))}
