@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabaseClient';
+import SignUpModal from '@/components/SignUpModal';
 
 export default function Page() {
   const router = useRouter();
@@ -10,6 +11,7 @@ export default function Page() {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [isSignUpOpen, setIsSignUpOpen] = useState(false);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -37,6 +39,8 @@ export default function Page() {
       if (authError) {
         if (authError.message.includes('Failed to fetch')) {
           setError('Network unreachable. Please check your internet connection.');
+        } else if (authError.message.toLowerCase().includes('email not confirmed')) {
+          setError('Please verify your email address before logging in. Check your inbox for the confirmation link.');
         } else {
           setError(authError.message);
         }
@@ -55,8 +59,8 @@ export default function Page() {
   };
 
   return (
-    <main className="flex flex-col min-h-screen items-center justify-center p-6">
-      <div className="w-full max-w-md bg-white border-2 border-black rounded-2xl p-8 flex flex-col relative shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
+    <main className="flex flex-col min-h-screen items-center justify-center p-4 sm:p-6">
+      <div className="w-full max-w-md bg-white border-2 border-black rounded-2xl p-6 sm:p-8 flex flex-col relative shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
         
         <div className="mb-8">
           <div className="w-12 h-12 bg-[#4f46e5] border-2 border-black rounded-xl flex items-center justify-center mb-6 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
@@ -111,7 +115,19 @@ export default function Page() {
             {loading ? 'Signing in...' : 'Sign In'}
           </button>
         </form>
+
+        <div className="mt-8 pt-6 border-t-2 border-black/10 flex flex-col items-center gap-3">
+          <p className="text-sm font-bold text-slate-500">Don't have an account?</p>
+          <button 
+            onClick={() => setIsSignUpOpen(true)}
+            className="w-full bg-white text-black border-2 border-black rounded-xl py-3 font-black uppercase tracking-widest hover:bg-slate-50 active:translate-y-1 active:translate-x-1 active:shadow-[0px_0px_0px_0px_rgba(0,0,0,1)] shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all"
+          >
+            Create Account
+          </button>
+        </div>
       </div>
+      
+      <SignUpModal isOpen={isSignUpOpen} onClose={() => setIsSignUpOpen(false)} />
       
       {/* Footer */}
       <footer className="mt-12 flex flex-col items-center justify-center text-xs font-bold text-slate-500 uppercase gap-3">
