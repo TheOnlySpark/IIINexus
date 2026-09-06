@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabaseClient';
+import { ArrowRight } from 'lucide-react';
 
 const APPS = [
   { id: 'slot-booking', name: 'BookMySlot', description: 'Book one of the VISTAS Amenities now!', url: 'https://campusslotbooking.vercel.app', short: 'BMS' },
@@ -101,7 +102,7 @@ export default function Dashboard() {
                 {app.description}
               </p>
               <div className="mt-auto pt-4 flex items-center text-xs font-bold text-slate-500 uppercase">
-                Launch App <span className="ml-1">→</span>
+                Launch App <ArrowRight className="w-4 h-4 ml-1" />
               </div>
             </a>
           ))}
