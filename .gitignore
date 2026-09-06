@@ -74,3 +74,15 @@ $RECYCLE.BIN/
 *.msix
 *.msm
 *.msp
+
+# Unused component
+components/SignUpModal.tsx
+
+# Build cache
+.swc/
+
+# IDE and AI artifacts
+.antigravity/
+AGENTS.md
+CLAUDE.md
+Master Design prompt.md

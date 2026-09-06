@@ -113,8 +113,8 @@ export default function Dashboard() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[#f0f2f5]">
-        <div className="font-black uppercase tracking-widest text-slate-400 animate-pulse">
+      <div className="min-h-screen flex items-center justify-center bg-slate-50">
+        <div className="text-[11px] font-bold uppercase tracking-widest text-slate-400 animate-pulse">
           Loading Workspace...
         </div>
       </div>
@@ -122,38 +122,38 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#f0f2f5] p-6 text-slate-900 font-sans">
+    <div className="min-h-screen flex flex-col bg-slate-50 p-4 sm:p-6 text-slate-900 font-sans">
       
       {announcement && (
-        <div className="w-full max-w-6xl mx-auto mb-6 bg-[#facc15] border-4 border-black rounded-xl p-4 flex items-start gap-3 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]">
-          <AlertCircle className="w-6 h-6 shrink-0 mt-0.5" strokeWidth={3} />
+        <div className="w-full max-w-6xl mx-auto mb-6 bg-amber-50 border border-amber-100 rounded-2xl p-4 flex items-start gap-3 shadow-sm">
+          <AlertCircle className="w-6 h-6 shrink-0 mt-0.5 text-amber-600" strokeWidth={2.5} />
           <div>
-            <h3 className="font-black uppercase tracking-widest text-xs mb-1 text-black/70">Global Announcement</h3>
-            <p className="font-bold">{announcement}</p>
+            <h3 className="font-black uppercase tracking-widest text-[10px] mb-1 text-amber-800/70">Global Announcement</h3>
+            <p className="font-bold text-amber-900 text-sm">{announcement}</p>
           </div>
         </div>
       )}
 
-      <header className="h-16 border-4 border-black bg-white flex items-center justify-between px-6 shrink-0 rounded-2xl shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] mb-8 max-w-6xl mx-auto w-full">
+      <header className="h-16 bg-slate-900 text-white flex items-center justify-between px-6 shrink-0 rounded-2xl shadow-md mb-4 max-w-6xl mx-auto w-full">
         <div className="flex items-center gap-3">
-          <div className="w-8 h-8 bg-[#4f46e5] border-2 border-black rounded-lg flex items-center justify-center">
-            <div className="w-4 h-4 border-2 border-black rotate-45"></div>
+          <div className="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center shadow-sm">
+            <div className="w-4 h-4 border-2 border-white rotate-45 rounded-[2px]"></div>
           </div>
           <span className="font-black text-xl tracking-tight uppercase">III Nexus</span>
         </div>
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-3 sm:gap-4">
           {profile?.role === 'admin' && (
             <Link 
               href="/admin"
-              className="flex items-center gap-2 px-4 py-2 bg-[#eab308] text-black text-xs font-black uppercase tracking-wider rounded-lg hover:bg-[#facc15] active:translate-y-1 active:translate-x-1 active:shadow-none transition-transform border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]"
+              className="flex items-center gap-2 px-4 py-2 bg-emerald-600 text-white text-[11px] font-bold uppercase tracking-wider rounded-lg hover:bg-emerald-700 active:scale-95 transition-all shadow-sm"
             >
-              <ShieldAlert className="w-4 h-4" />
-              Admin
+              <ShieldAlert className="w-4 h-4" strokeWidth={2.5} />
+              <span className="hidden sm:inline">Admin</span>
             </Link>
           )}
           <button
             onClick={handleSignOut}
-            className="px-4 py-2 bg-black text-white text-xs font-bold uppercase rounded-lg hover:bg-zinc-800 active:translate-y-1 active:translate-x-1 active:shadow-none transition-transform border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]"
+            className="px-4 py-2 bg-slate-800 text-white text-[11px] font-bold uppercase tracking-wider rounded-lg hover:bg-slate-700 active:scale-95 transition-all shadow-sm"
           >
             Sign Out
           </button>
@@ -161,12 +161,12 @@ export default function Dashboard() {
       </header>
 
       <main className="flex-1 max-w-6xl mx-auto w-full">
-        <h2 className="text-sm font-black uppercase mb-4 border-b-4 border-black pb-2 tracking-widest">
+        <h2 className="text-[11px] font-black uppercase mb-6 border-b border-slate-200 pb-2 tracking-widest text-slate-500">
           Available Modules
         </h2>
         
         {apps.length === 0 ? (
-          <div className="p-8 border-4 border-black border-dashed rounded-2xl text-center text-slate-500 font-bold uppercase tracking-widest bg-white/50">
+          <div className="p-8 border border-slate-200 border-dashed rounded-2xl text-center text-slate-400 font-bold uppercase tracking-widest text-[11px]">
             No active modules available right now.
           </div>
         ) : (
@@ -178,19 +178,19 @@ export default function Dashboard() {
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={(e) => handleAppClick(e, app)}
-                className="group bg-white border-4 border-black rounded-2xl p-6 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] flex flex-col hover:-translate-y-1 hover:shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] active:translate-y-1 active:translate-x-1 active:shadow-[0px_0px_0px_0px_rgba(0,0,0,1)] transition-transform cursor-pointer no-underline text-inherit"
+                className="group bg-white border border-slate-100 rounded-2xl p-6 shadow-sm flex flex-col hover:shadow-md active:scale-95 transition-all cursor-pointer no-underline text-inherit"
               >
-                <div className="w-16 h-16 bg-slate-100 border-4 border-black rounded-xl mb-6 flex items-center justify-center group-hover:bg-[#4f46e5] group-hover:text-white transition-colors">
+                <div className="w-16 h-16 bg-indigo-50 text-indigo-600 rounded-2xl mb-6 flex items-center justify-center group-hover:bg-indigo-600 group-hover:text-white transition-colors">
                   <span className="font-black text-2xl">{app.short_icon}</span>
                 </div>
-                <h3 className="text-xl font-black uppercase leading-tight mb-2 tracking-tight group-hover:underline">
+                <h3 className="text-xl font-black uppercase leading-tight mb-2 tracking-tight text-slate-900">
                   {app.name}
                 </h3>
-                <p className="text-sm font-medium text-slate-600 mb-4 leading-snug">
+                <p className="text-sm font-medium text-slate-500 mb-4 leading-snug">
                   {app.description}
                 </p>
-                <div className="mt-auto pt-4 flex items-center text-xs font-black text-slate-500 uppercase group-hover:text-[#4f46e5] transition-colors">
-                  Launch App <ArrowRight className="w-4 h-4 ml-1" strokeWidth={3} />
+                <div className="mt-auto pt-4 flex items-center text-[11px] font-bold text-slate-400 uppercase tracking-widest group-hover:text-indigo-600 transition-colors">
+                  Launch App <ArrowRight className="w-4 h-4 ml-1" strokeWidth={2.5} />
                 </div>
               </a>
             ))}
@@ -199,12 +199,12 @@ export default function Dashboard() {
       </main>
 
       {/* Footer */}
-      <footer className="mt-12 border-t-4 border-black pt-6 pb-2 flex flex-col md:flex-row items-center justify-between text-xs font-black text-slate-500 uppercase gap-4 w-full max-w-6xl mx-auto shrink-0">
+      <footer className="mt-12 border-t border-slate-200 pt-6 pb-2 flex flex-col md:flex-row items-center justify-between text-[11px] font-bold text-slate-400 uppercase tracking-widest gap-4 w-full max-w-6xl mx-auto shrink-0">
         <div>&copy; {new Date().getFullYear()} III Nexus. All rights reserved.</div>
         <div className="flex gap-4">
-          <a href="/privacy" className="hover:text-black hover:underline transition-colors">Privacy Policy</a>
-          <a href="/terms" className="hover:text-black hover:underline transition-colors">Terms of Service</a>
-          <a href="/legal" className="hover:text-black hover:underline transition-colors">Legal</a>
+          <a href="/privacy" className="hover:text-slate-700 transition-colors">Privacy Policy</a>
+          <a href="/terms" className="hover:text-slate-700 transition-colors">Terms of Service</a>
+          <a href="/legal" className="hover:text-slate-700 transition-colors">Legal</a>
         </div>
       </footer>
     </div>
