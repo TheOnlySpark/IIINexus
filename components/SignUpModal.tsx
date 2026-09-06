@@ -109,7 +109,7 @@ export default function SignUpModal({ isOpen, onClose }: SignUpModalProps) {
                 </p>
                 <button
                   onClick={onClose}
-                  className="mt-6 w-full bg-[#4f46e5] text-white border-2 border-black rounded-xl py-3 font-black uppercase tracking-widest hover:bg-[#4338ca] transition-all active:translate-y-1 active:translate-x-1 active:shadow-none shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]"
+                  className="mt-6 w-full bg-[#4f46e5] text-white border-2 border-black rounded-xl py-3 font-black uppercase tracking-widest hover:bg-[#4338ca] transition-transform active:translate-y-1 active:translate-x-1 active:shadow-none shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]"
                 >
                   Return to Login
                 </button>
@@ -134,7 +134,7 @@ export default function SignUpModal({ isOpen, onClose }: SignUpModalProps) {
                       value={formData.name}
                       onChange={handleChange}
                       required
-                      className="w-full border-2 border-black rounded-xl p-3 bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#4f46e5] transition-all font-medium text-black placeholder:text-slate-400"
+                      className="w-full border-2 border-black rounded-xl p-3 bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#4f46e5] transition-colors font-medium text-black placeholder:text-slate-400"
                       placeholder="John Doe"
                     />
                   </div>
@@ -150,7 +150,7 @@ export default function SignUpModal({ isOpen, onClose }: SignUpModalProps) {
                       value={formData.regNo}
                       onChange={handleChange}
                       required
-                      className="w-full border-2 border-black rounded-xl p-3 bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#4f46e5] transition-all font-medium text-black placeholder:text-slate-400"
+                      className="w-full border-2 border-black rounded-xl p-3 bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#4f46e5] transition-colors font-medium text-black placeholder:text-slate-400"
                       placeholder="23BCE1234"
                     />
                   </div>
@@ -167,7 +167,7 @@ export default function SignUpModal({ isOpen, onClose }: SignUpModalProps) {
                     value={formData.email}
                     onChange={handleChange}
                     required
-                    className="w-full border-2 border-black rounded-xl p-3 bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#4f46e5] transition-all font-medium text-black placeholder:text-slate-400"
+                    className="w-full border-2 border-black rounded-xl p-3 bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#4f46e5] transition-colors font-medium text-black placeholder:text-slate-400"
                     placeholder="member@student.university.edu"
                   />
                 </div>
@@ -184,7 +184,7 @@ export default function SignUpModal({ isOpen, onClose }: SignUpModalProps) {
                       value={formData.course}
                       onChange={handleChange}
                       required
-                      className="w-full border-2 border-black rounded-xl p-3 bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#4f46e5] transition-all font-medium text-black placeholder:text-slate-400"
+                      className="w-full border-2 border-black rounded-xl p-3 bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#4f46e5] transition-colors font-medium text-black placeholder:text-slate-400"
                       placeholder="B.Tech CSE"
                     />
                   </div>
@@ -199,7 +199,7 @@ export default function SignUpModal({ isOpen, onClose }: SignUpModalProps) {
                       value={formData.year}
                       onChange={handleChange}
                       required
-                      className="w-full border-2 border-black rounded-xl p-3 bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#4f46e5] transition-all font-medium text-black"
+                      className="w-full border-2 border-black rounded-xl p-3 bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#4f46e5] transition-colors font-medium text-black"
                     >
                       <option value="" disabled>Select Year</option>
                       <option value="1">1st Year</option>
@@ -222,7 +222,7 @@ export default function SignUpModal({ isOpen, onClose }: SignUpModalProps) {
                     onChange={handleChange}
                     required
                     minLength={6}
-                    className="w-full border-2 border-black rounded-xl p-3 bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#4f46e5] transition-all font-medium text-black placeholder:text-slate-400"
+                    className="w-full border-2 border-black rounded-xl p-3 bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#4f46e5] transition-colors font-medium text-black placeholder:text-slate-400"
                     placeholder="••••••••"
                   />
                 </div>
@@ -239,7 +239,7 @@ export default function SignUpModal({ isOpen, onClose }: SignUpModalProps) {
                     onChange={handleChange}
                     required
                     minLength={6}
-                    className="w-full border-2 border-black rounded-xl p-3 bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#4f46e5] transition-all font-medium text-black placeholder:text-slate-400"
+                    className="w-full border-2 border-black rounded-xl p-3 bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#4f46e5] transition-colors font-medium text-black placeholder:text-slate-400"
                     placeholder="••••••••"
                   />
                 </div>
@@ -264,7 +264,7 @@ export default function SignUpModal({ isOpen, onClose }: SignUpModalProps) {
                 <button
                   type="submit"
                   disabled={loading || !agreedToTerms}
-                  className="mt-4 w-full bg-[#facc15] text-black border-4 border-black rounded-xl py-4 font-black uppercase tracking-widest hover:bg-[#eab308] active:translate-y-1 active:translate-x-1 active:shadow-[0px_0px_0px_0px_rgba(0,0,0,1)] shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:active:translate-y-0 disabled:active:translate-x-0 disabled:active:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]"
+                  className="mt-4 w-full bg-[#facc15] text-black border-4 border-black rounded-xl py-4 font-black uppercase tracking-widest hover:bg-[#eab308] active:translate-y-1 active:translate-x-1 active:shadow-[0px_0px_0px_0px_rgba(0,0,0,1)] shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] transition-transform disabled:opacity-50 disabled:cursor-not-allowed disabled:active:translate-y-0 disabled:active:translate-x-0 disabled:active:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]"
                 >
                   {loading ? 'Creating Account...' : 'Sign Up'}
                 </button>

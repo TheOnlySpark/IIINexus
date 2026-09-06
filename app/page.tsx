@@ -87,7 +87,7 @@ export default function Page() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              className="w-full border-2 border-black rounded-xl p-3 bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#4f46e5] transition-all font-medium text-black placeholder:text-slate-400"
+              className="w-full border-2 border-black rounded-xl p-3 bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#4f46e5] transition-colors font-medium text-black placeholder:text-slate-400"
               placeholder="member@iiinexus.org"
             />
           </div>
@@ -102,7 +102,7 @@ export default function Page() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              className="w-full border-2 border-black rounded-xl p-3 bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#4f46e5] transition-all font-medium text-black placeholder:text-slate-400"
+              className="w-full border-2 border-black rounded-xl p-3 bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#4f46e5] transition-colors font-medium text-black placeholder:text-slate-400"
               placeholder="••••••••"
             />
           </div>
@@ -110,7 +110,7 @@ export default function Page() {
           <button
             type="submit"
             disabled={loading}
-            className="mt-4 w-full bg-[#4f46e5] text-white border-2 border-black rounded-xl py-4 font-black uppercase tracking-widest hover:bg-[#4338ca] active:translate-y-1 active:translate-x-1 active:shadow-[0px_0px_0px_0px_rgba(0,0,0,1)] shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:active:translate-y-0 disabled:active:translate-x-0 disabled:active:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]"
+            className="mt-4 w-full bg-[#4f46e5] text-white border-2 border-black rounded-xl py-4 font-black uppercase tracking-widest hover:bg-[#4338ca] active:translate-y-1 active:translate-x-1 active:shadow-[0px_0px_0px_0px_rgba(0,0,0,1)] shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-transform disabled:opacity-50 disabled:cursor-not-allowed disabled:active:translate-y-0 disabled:active:translate-x-0 disabled:active:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]"
           >
             {loading ? 'Signing in...' : 'Sign In'}
           </button>
@@ -120,7 +120,7 @@ export default function Page() {
           <p className="text-sm font-bold text-slate-500">Don't have an account?</p>
           <button 
             onClick={() => setIsSignUpOpen(true)}
-            className="w-full bg-white text-black border-2 border-black rounded-xl py-3 font-black uppercase tracking-widest hover:bg-slate-50 active:translate-y-1 active:translate-x-1 active:shadow-[0px_0px_0px_0px_rgba(0,0,0,1)] shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all"
+            className="w-full bg-white text-black border-2 border-black rounded-xl py-3 font-black uppercase tracking-widest hover:bg-slate-50 active:translate-y-1 active:translate-x-1 active:shadow-[0px_0px_0px_0px_rgba(0,0,0,1)] shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-transform"
           >
             Create Account
           </button>
