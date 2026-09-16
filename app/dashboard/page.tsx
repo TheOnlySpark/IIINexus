@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabaseClient';
-import { ArrowRight, AlertCircle, ShieldAlert } from 'lucide-react';
+import { ArrowRight, AlertCircle, ShieldAlert, Megaphone } from 'lucide-react';
 import Link from 'next/link';
 
 interface AppType {
@@ -141,11 +141,18 @@ export default function Dashboard() {
           </div>
           <span className="font-black text-xl tracking-tight uppercase">III Nexus</span>
         </div>
-        <div className="flex items-center gap-3 sm:gap-4">
+        <div className="flex items-center gap-2 sm:gap-4">
+          <Link
+            href="/announcements"
+            className="flex items-center gap-2 px-3 sm:px-4 py-2 bg-slate-800 text-white text-[11px] font-bold uppercase tracking-wider rounded-lg hover:bg-slate-700 active:scale-95 transition-all shadow-sm"
+          >
+            <Megaphone className="w-4 h-4" strokeWidth={2.5} />
+            <span className="hidden sm:inline">Updates</span>
+          </Link>
           {profile?.role === 'admin' && (
             <Link 
               href="/admin"
-              className="flex items-center gap-2 px-4 py-2 bg-emerald-600 text-white text-[11px] font-bold uppercase tracking-wider rounded-lg hover:bg-emerald-700 active:scale-95 transition-all shadow-sm"
+              className="flex items-center gap-2 px-3 sm:px-4 py-2 bg-emerald-600 text-white text-[11px] font-bold uppercase tracking-wider rounded-lg hover:bg-emerald-700 active:scale-95 transition-all shadow-sm"
             >
               <ShieldAlert className="w-4 h-4" strokeWidth={2.5} />
               <span className="hidden sm:inline">Admin</span>
@@ -153,7 +160,7 @@ export default function Dashboard() {
           )}
           <button
             onClick={handleSignOut}
-            className="px-4 py-2 bg-slate-800 text-white text-[11px] font-bold uppercase tracking-wider rounded-lg hover:bg-slate-700 active:scale-95 transition-all shadow-sm"
+            className="px-3 sm:px-4 py-2 bg-slate-800 text-slate-300 hover:text-white text-[11px] font-bold uppercase tracking-wider rounded-lg hover:bg-slate-700 active:scale-95 transition-all shadow-sm"
           >
             Sign Out
           </button>
