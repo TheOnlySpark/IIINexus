@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabaseClient';
 import { ShieldAlert, LayoutGrid, Megaphone, BarChart3, Plus, Trash2, Edit2, Check, X } from 'lucide-react';
 import Link from 'next/link';
+import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 
 interface AppType {
   id: string;
@@ -13,6 +14,8 @@ interface AppType {
   url: string;
   short_icon: string;
   is_active: boolean;
+  target_courses: string[];
+  target_years: string[];
 }
 
 interface AnnouncementType {
@@ -26,6 +29,8 @@ interface AnalyticsType {
   app_name: string;
   clicks: number;
 }
+
+const COLORS = ['#4f46e5', '#ec4899', '#f59e0b', '#10b981', '#6366f1', '#14b8a6', '#f43f5e', '#8b5cf6'];
 
 export default function AdminDashboard() {
   const router = useRouter();
@@ -41,7 +46,8 @@ export default function AdminDashboard() {
   const [newAnnouncement, setNewAnnouncement] = useState('');
   
   const [editingApp, setEditingApp] = useState<AppType | null>(null);
-  const [newApp, setNewApp] = useState<Partial<AppType>>({ name: '', description: '', url: '', short_icon: '', is_active: true });
+  const [newApp, setNewApp] = useState<Partial<AppType>>({ name: '', description: '', url: '', short_icon: '', is_active: true, target_courses: [], target_years: [] });
+  const [isUniversal, setIsUniversal] = useState(true);
 
   useEffect(() => {
     let mounted = true;
@@ -75,7 +81,14 @@ export default function AdminDashboard() {
     const fetchData = async () => {
       // Fetch Apps
       const { data: appsData } = await supabase.from('apps').select('*').order('created_at', { ascending: true });
-      if (mounted && appsData) setApps(appsData);
+      if (mounted && appsData) {
+        // Ensure arrays are initialized even if null in DB
+        setApps(appsData.map(app => ({
+          ...app,
+          target_courses: app.target_courses || [],
+          target_years: app.target_years || []
+        })));
+      }
 
       // Fetch Announcements
       const { data: annData } = await supabase.from('announcements').select('*').order('created_at', { ascending: false });
@@ -89,7 +102,7 @@ export default function AdminDashboard() {
           const appName = click.apps?.name || 'Unknown App';
           agg[appName] = (agg[appName] || 0) + 1;
         });
-        setAnalytics(Object.entries(agg).map(([app_name, clicks]) => ({ app_name, clicks })));
+        setAnalytics(Object.entries(agg).map(([app_name, clicks]) => ({ app_name, clicks })).sort((a,b) => b.clicks - a.clicks));
       }
 
       if (mounted) setLoading(false);
@@ -111,17 +124,25 @@ export default function AdminDashboard() {
 
   const saveApp = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Clean up arrays (trim spaces, filter empty)
+    const cleanCourses = (editingApp ? editingApp.target_courses : newApp.target_courses)?.map(s => s.trim()).filter(Boolean) || [];
+    const cleanYears = (editingApp ? editingApp.target_years : newApp.target_years)?.map(s => s.trim()).filter(Boolean) || [];
+
     if (editingApp) {
-      const { error } = await supabase.from('apps').update(editingApp).eq('id', editingApp.id);
+      const payload = { ...editingApp, target_courses: cleanCourses, target_years: cleanYears };
+      const { error } = await supabase.from('apps').update(payload).eq('id', editingApp.id);
       if (!error) {
-        setApps(apps.map(a => a.id === editingApp.id ? editingApp : a));
+        setApps(apps.map(a => a.id === editingApp.id ? payload : a));
         setEditingApp(null);
       }
     } else {
-      const { data, error } = await supabase.from('apps').insert([newApp]).select();
+      const payload = { ...newApp, target_courses: cleanCourses, target_years: cleanYears };
+      const { data, error } = await supabase.from('apps').insert([payload]).select();
       if (!error && data) {
-        setApps([...apps, data[0]]);
-        setNewApp({ name: '', description: '', url: '', short_icon: '', is_active: true });
+        setApps([...apps, { ...data[0], target_courses: data[0].target_courses || [], target_years: data[0].target_years || [] }]);
+        setNewApp({ name: '', description: '', url: '', short_icon: '', is_active: true, target_courses: [], target_years: [] });
+        setIsUniversal(true);
       }
     }
   };
@@ -148,7 +169,6 @@ export default function AdminDashboard() {
   };
 
   const toggleAnnouncement = async (id: string, currentStatus: boolean) => {
-    // If activating, deactivate all others first
     if (!currentStatus) {
       await supabase.from('announcements').update({ is_active: false }).neq('id', '00000000-0000-0000-0000-000000000000');
     }
@@ -229,7 +249,7 @@ export default function AdminDashboard() {
             <div className="flex flex-col gap-8">
               <div>
                 <h2 className="text-2xl font-black uppercase tracking-tight mb-2 text-slate-900">Module Manager</h2>
-                <p className="text-slate-500 font-medium text-sm">Add, edit, or disable apps on the student dashboard.</p>
+                <p className="text-slate-500 font-medium text-sm">Add, edit, or disable apps, and manage visibility targeting.</p>
               </div>
 
               <form onSubmit={saveApp} className="bg-slate-50 border border-slate-200 border-dashed rounded-2xl p-6 flex flex-col gap-4">
@@ -242,12 +262,43 @@ export default function AdminDashboard() {
                 <input required placeholder="URL (e.g. https://campusslotbooking.vercel.app)" type="url" className="border border-slate-200 rounded-xl p-3 bg-white font-medium text-slate-900 placeholder:text-slate-400 transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:border-indigo-600" value={editingApp ? editingApp.url : newApp.url} onChange={(e) => editingApp ? setEditingApp({...editingApp, url: e.target.value}) : setNewApp({...newApp, url: e.target.value})} />
                 <textarea required placeholder="Short Description" className="border border-slate-200 rounded-xl p-3 bg-white font-medium text-slate-900 placeholder:text-slate-400 transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:border-indigo-600" value={editingApp ? editingApp.description : newApp.description} onChange={(e) => editingApp ? setEditingApp({...editingApp, description: e.target.value}) : setNewApp({...newApp, description: e.target.value})} />
                 
+                <div className="bg-white border border-slate-200 rounded-xl p-4 flex flex-col gap-4">
+                  <label className="flex items-center gap-3 cursor-pointer select-none">
+                    <input 
+                      type="checkbox" 
+                      className="w-4 h-4 text-indigo-600 rounded border-slate-300 focus:ring-indigo-600 cursor-pointer"
+                      checked={isUniversal}
+                      onChange={(e) => {
+                        setIsUniversal(e.target.checked);
+                        if (e.target.checked) {
+                          if (editingApp) setEditingApp({...editingApp, target_courses: [], target_years: []});
+                          else setNewApp({...newApp, target_courses: [], target_years: []});
+                        }
+                      }} 
+                    />
+                    <span className="text-[11px] font-bold uppercase tracking-widest text-slate-700">Open Module Universally (Visible to everyone)</span>
+                  </label>
+                  
+                  {!isUniversal && (
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2 border-t border-slate-100">
+                      <div>
+                        <label className="block text-[10px] font-bold uppercase tracking-widest text-slate-500 mb-1">Target Courses (Comma separated)</label>
+                        <input placeholder="e.g. BCA, BBA" className="w-full border border-slate-200 rounded-xl p-3 bg-slate-50 font-medium text-slate-900 placeholder:text-slate-400 transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:border-indigo-600" value={editingApp ? editingApp.target_courses.join(', ') : newApp.target_courses?.join(', ')} onChange={(e) => { const arr = e.target.value.split(','); if(editingApp) setEditingApp({...editingApp, target_courses: arr}); else setNewApp({...newApp, target_courses: arr}); }} />
+                      </div>
+                      <div>
+                        <label className="block text-[10px] font-bold uppercase tracking-widest text-slate-500 mb-1">Target Years (Comma separated)</label>
+                        <input placeholder="e.g. 1, 2, Alumni" className="w-full border border-slate-200 rounded-xl p-3 bg-slate-50 font-medium text-slate-900 placeholder:text-slate-400 transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:border-indigo-600" value={editingApp ? editingApp.target_years.join(', ') : newApp.target_years?.join(', ')} onChange={(e) => { const arr = e.target.value.split(','); if(editingApp) setEditingApp({...editingApp, target_years: arr}); else setNewApp({...newApp, target_years: arr}); }} />
+                      </div>
+                    </div>
+                  )}
+                </div>
+
                 <div className="flex gap-4 pt-2">
                   <button type="submit" className="bg-indigo-600 text-white px-6 py-3 rounded-xl font-bold uppercase tracking-wider text-[11px] hover:bg-indigo-700 active:scale-95 shadow-md transition-all">
                     {editingApp ? 'Save Changes' : 'Publish App'}
                   </button>
                   {editingApp && (
-                    <button type="button" onClick={() => setEditingApp(null)} className="bg-white text-slate-700 px-6 py-3 border border-slate-200 rounded-xl font-bold uppercase tracking-wider text-[11px] hover:bg-slate-50 active:scale-95 shadow-sm transition-all">
+                    <button type="button" onClick={() => { setEditingApp(null); setIsUniversal(true); }} className="bg-white text-slate-700 px-6 py-3 border border-slate-200 rounded-xl font-bold uppercase tracking-wider text-[11px] hover:bg-slate-50 active:scale-95 shadow-sm transition-all">
                       Cancel
                     </button>
                   )}
@@ -263,13 +314,26 @@ export default function AdminDashboard() {
                         <h4 className="font-black uppercase tracking-tight text-lg text-slate-900">{app.name}</h4>
                         {!app.is_active && <span className="bg-rose-100 text-rose-700 text-[10px] font-bold uppercase px-2 py-1 rounded-md tracking-widest">Hidden</span>}
                       </div>
-                      <p className="text-sm font-medium text-slate-500 truncate max-w-xs sm:max-w-md">{app.url}</p>
+                      <p className="text-sm font-medium text-slate-500 truncate max-w-xs sm:max-w-md mb-2">{app.url}</p>
+                      
+                      <div className="flex gap-2">
+                        {app.target_courses && app.target_courses.length > 0 ? (
+                          <span className="text-[9px] font-bold uppercase tracking-widest bg-slate-100 text-slate-600 px-2 py-1 rounded">Courses: {app.target_courses.join(', ')}</span>
+                        ) : (
+                          <span className="text-[9px] font-bold uppercase tracking-widest bg-slate-100 text-slate-600 px-2 py-1 rounded">All Courses</span>
+                        )}
+                        {app.target_years && app.target_years.length > 0 ? (
+                          <span className="text-[9px] font-bold uppercase tracking-widest bg-slate-100 text-slate-600 px-2 py-1 rounded">Years: {app.target_years.join(', ')}</span>
+                        ) : (
+                          <span className="text-[9px] font-bold uppercase tracking-widest bg-slate-100 text-slate-600 px-2 py-1 rounded">All Years</span>
+                        )}
+                      </div>
                     </div>
                     <div className="flex items-center gap-1">
                       <button onClick={() => toggleAppActive(app.id, app.is_active)} className="p-2 text-slate-400 hover:text-slate-700 hover:bg-slate-100 rounded-xl transition-colors">
                         {app.is_active ? <Check className="w-5 h-5 text-emerald-600" /> : <X className="w-5 h-5 text-rose-600" />}
                       </button>
-                      <button onClick={() => setEditingApp(app)} className="p-2 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-xl transition-colors">
+                      <button onClick={() => { setEditingApp(app); setIsUniversal(!app.target_courses?.length && !app.target_years?.length); }} className="p-2 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-xl transition-colors">
                         <Edit2 className="w-5 h-5" />
                       </button>
                       <button onClick={() => deleteApp(app.id)} className="p-2 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-xl transition-colors">
@@ -326,7 +390,7 @@ export default function AdminDashboard() {
             <div className="flex flex-col gap-8">
               <div>
                 <h2 className="text-2xl font-black uppercase tracking-tight mb-2 text-slate-900">Usage Analytics</h2>
-                <p className="text-slate-500 font-medium text-sm">See which modules are driving the most engagement.</p>
+                <p className="text-slate-500 font-medium text-sm">Visualize engagement across all active modules.</p>
               </div>
 
               {analytics.length === 0 ? (
@@ -334,22 +398,42 @@ export default function AdminDashboard() {
                   No clicks recorded yet.
                 </div>
               ) : (
-                <div className="flex flex-col gap-4">
-                  {analytics.sort((a,b) => b.clicks - a.clicks).map((item, index) => (
-                    <div key={index} className="border border-slate-100 rounded-2xl p-5 flex items-center justify-between bg-white shadow-sm hover:shadow-md transition-all relative overflow-hidden">
-                      {/* Gentle progress bar background for visual flair */}
-                      <div className="absolute top-0 left-0 bottom-0 bg-indigo-50 z-0 transition-all duration-1000" style={{ width: `${Math.min(100, (item.clicks / analytics[0].clicks) * 100)}%` }}></div>
-                      
-                      <div className="relative z-10 flex items-center gap-4">
-                        <span className="font-black text-2xl text-slate-200">#{index + 1}</span>
-                        <h4 className="font-black uppercase tracking-tight text-lg text-slate-900">{item.app_name}</h4>
-                      </div>
-                      <div className="relative z-10 flex flex-col items-end">
-                        <span className="font-black text-3xl text-indigo-600 leading-none">{item.clicks}</span>
-                        <span className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mt-1">Total Clicks</span>
-                      </div>
+                <div className="flex flex-col xl:flex-row gap-8">
+                  {/* Bar Chart */}
+                  <div className="flex-1 border border-slate-100 rounded-2xl p-6 shadow-sm">
+                    <h3 className="text-[11px] font-black uppercase tracking-widest text-slate-500 mb-6">Engagement by Module</h3>
+                    <div className="w-full h-72">
+                      <ResponsiveContainer width="100%" height="100%">
+                        <BarChart data={analytics} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+                          <XAxis dataKey="app_name" tick={{ fontSize: 10, fill: '#64748b' }} axisLine={false} tickLine={false} />
+                          <YAxis tick={{ fontSize: 10, fill: '#64748b' }} axisLine={false} tickLine={false} />
+                          <Tooltip cursor={{ fill: '#f8fafc' }} contentStyle={{ borderRadius: '12px', border: '1px solid #e2e8f0', fontWeight: 'bold' }} />
+                          <Bar dataKey="clicks" radius={[4, 4, 0, 0]}>
+                            {analytics.map((entry, index) => (
+                              <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                            ))}
+                          </Bar>
+                        </BarChart>
+                      </ResponsiveContainer>
                     </div>
-                  ))}
+                  </div>
+
+                  {/* Pie Chart */}
+                  <div className="xl:w-1/3 border border-slate-100 rounded-2xl p-6 shadow-sm">
+                    <h3 className="text-[11px] font-black uppercase tracking-widest text-slate-500 mb-6 text-center">Click Distribution</h3>
+                    <div className="w-full h-64 flex justify-center items-center">
+                      <ResponsiveContainer width="100%" height="100%">
+                        <PieChart>
+                          <Pie data={analytics} dataKey="clicks" nameKey="app_name" cx="50%" cy="50%" innerRadius={60} outerRadius={90} paddingAngle={2} stroke="none">
+                            {analytics.map((entry, index) => (
+                              <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                            ))}
+                          </Pie>
+                          <Tooltip contentStyle={{ borderRadius: '12px', border: '1px solid #e2e8f0', fontWeight: 'bold' }} />
+                        </PieChart>
+                      </ResponsiveContainer>
+                    </div>
+                  </div>
                 </div>
               )}
             </div>

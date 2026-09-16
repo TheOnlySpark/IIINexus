@@ -12,6 +12,8 @@ interface AppType {
   description: string;
   url: string;
   short_icon: string;
+  target_courses?: string[];
+  target_years?: string[];
 }
 
 interface ProfileType {
@@ -24,6 +26,7 @@ export default function Dashboard() {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [apps, setApps] = useState<AppType[]>([]);
+  const [appsError, setAppsError] = useState<string | null>(null);
   const [pinnedAppIds, setPinnedAppIds] = useState<Set<string>>(new Set());
   const [announcement, setAnnouncement] = useState<string | null>(null);
   const [profile, setProfile] = useState<ProfileType | null>(null);
@@ -51,14 +54,28 @@ export default function Dashboard() {
         }
 
         // Fetch active apps
-        const { data: appsData } = await supabase
+        const { data: appsData, error: appsFetchError } = await supabase
           .from('apps')
-          .select('id, name, description, url, short_icon')
+          .select('id, name, description, url, short_icon, target_courses, target_years')
           .eq('is_active', true)
           .order('created_at', { ascending: true });
 
+        if (appsFetchError) {
+          console.error("Error fetching apps:", appsFetchError);
+          if (mounted) setAppsError(appsFetchError.message);
+        }
+
         if (mounted && appsData) {
-          setApps(appsData);
+          const userCourse = profileData?.course || '';
+          const userYear = profileData?.year || '';
+          
+          const filteredApps = appsData.filter(app => {
+            const courseTargeted = !app.target_courses || app.target_courses.length === 0 || app.target_courses.includes(userCourse);
+            const yearTargeted = !app.target_years || app.target_years.length === 0 || app.target_years.includes(userYear);
+            return courseTargeted && yearTargeted;
+          });
+          
+          setApps(filteredApps);
         }
 
         // Fetch pinned apps for user
@@ -268,7 +285,11 @@ export default function Dashboard() {
             {pinnedApps.length > 0 ? "All Modules" : "Available Modules"}
           </h2>
           
-          {apps.length === 0 ? (
+          {appsError ? (
+            <div className="p-8 border border-rose-200 bg-rose-50 border-dashed rounded-2xl text-center text-rose-500 font-bold uppercase tracking-widest text-[11px]">
+              Error loading modules: {appsError}
+            </div>
+          ) : apps.length === 0 ? (
             <div className="p-8 border border-slate-200 border-dashed rounded-2xl text-center text-slate-400 font-bold uppercase tracking-widest text-[11px]">
               No active modules available right now.
             </div>
