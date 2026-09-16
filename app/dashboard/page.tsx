@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabaseClient';
-import { ArrowRight, AlertCircle, ShieldAlert, Megaphone } from 'lucide-react';
+import { ArrowRight, AlertCircle, ShieldAlert, Megaphone, Settings, Pin, PinOff } from 'lucide-react';
 import Link from 'next/link';
 
 interface AppType {
@@ -24,6 +24,7 @@ export default function Dashboard() {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [apps, setApps] = useState<AppType[]>([]);
+  const [pinnedAppIds, setPinnedAppIds] = useState<Set<string>>(new Set());
   const [announcement, setAnnouncement] = useState<string | null>(null);
   const [profile, setProfile] = useState<ProfileType | null>(null);
 
@@ -58,6 +59,16 @@ export default function Dashboard() {
 
         if (mounted && appsData) {
           setApps(appsData);
+        }
+
+        // Fetch pinned apps for user
+        const { data: pinsData } = await supabase
+          .from('user_pins')
+          .select('app_id')
+          .eq('user_id', session.user.id);
+          
+        if (mounted && pinsData) {
+          setPinnedAppIds(new Set(pinsData.map(pin => pin.app_id)));
         }
 
         // Fetch active announcements
@@ -98,6 +109,37 @@ export default function Dashboard() {
     router.replace('/');
   };
 
+  const togglePin = async (e: React.MouseEvent, appId: string) => {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session) return;
+
+    const isCurrentlyPinned = pinnedAppIds.has(appId);
+    
+    // Optimistic UI Update
+    const newPins = new Set(pinnedAppIds);
+    if (isCurrentlyPinned) {
+      newPins.delete(appId);
+    } else {
+      newPins.add(appId);
+    }
+    setPinnedAppIds(newPins);
+
+    if (isCurrentlyPinned) {
+      await supabase
+        .from('user_pins')
+        .delete()
+        .eq('user_id', session.user.id)
+        .eq('app_id', appId);
+    } else {
+      await supabase
+        .from('user_pins')
+        .insert({ user_id: session.user.id, app_id: appId });
+    }
+  };
+
   const handleAppClick = async (e: React.MouseEvent<HTMLAnchorElement>, app: AppType) => {
     if (!profile) return;
     
@@ -113,7 +155,7 @@ export default function Dashboard() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-slate-50">
+      <div className="min-h-screen flex items-center justify-center bg-slate-50 transition-colors">
         <div className="text-[11px] font-bold uppercase tracking-widest text-slate-400 animate-pulse">
           Loading Workspace...
         </div>
@@ -121,8 +163,42 @@ export default function Dashboard() {
     );
   }
 
+  const pinnedApps = apps.filter(app => pinnedAppIds.has(app.id));
+  const unpinnedApps = apps.filter(app => !pinnedAppIds.has(app.id));
+
+  const AppCard = ({ app, isPinned }: { app: AppType, isPinned: boolean }) => (
+    <a
+      href={app.url}
+      target="_blank"
+      rel="noopener noreferrer"
+      onClick={(e) => handleAppClick(e, app)}
+      className="group bg-white border border-slate-100 rounded-2xl p-6 shadow-sm flex flex-col hover:shadow-md active:scale-95 transition-all cursor-pointer no-underline text-inherit relative overflow-hidden"
+    >
+      <button
+        onClick={(e) => togglePin(e, app.id)}
+        className="absolute top-4 right-4 p-2 rounded-xl transition-all opacity-0 group-hover:opacity-100 text-slate-300 hover:text-indigo-600 hover:bg-indigo-50 focus:opacity-100"
+        title={isPinned ? "Unpin" : "Pin to Favorites"}
+      >
+        {isPinned ? <PinOff className="w-5 h-5 text-indigo-500" /> : <Pin className="w-5 h-5" />}
+      </button>
+      
+      <div className="w-16 h-16 bg-indigo-50 text-indigo-600 rounded-2xl mb-6 flex items-center justify-center group-hover:bg-indigo-600 group-hover:text-white transition-colors">
+        <span className="font-black text-2xl">{app.short_icon}</span>
+      </div>
+      <h3 className="text-xl font-black uppercase leading-tight mb-2 tracking-tight text-slate-900">
+        {app.name}
+      </h3>
+      <p className="text-sm font-medium text-slate-500 mb-4 leading-snug">
+        {app.description}
+      </p>
+      <div className="mt-auto pt-4 flex items-center text-[11px] font-bold text-slate-400 uppercase tracking-widest group-hover:text-indigo-600 transition-colors">
+        Launch App <ArrowRight className="w-4 h-4 ml-1" strokeWidth={2.5} />
+      </div>
+    </a>
+  );
+
   return (
-    <div className="min-h-screen flex flex-col bg-slate-50 p-4 sm:p-6 text-slate-900 font-sans">
+    <div className="min-h-screen flex flex-col bg-slate-50 p-4 sm:p-6 text-slate-900 font-sans transition-colors">
       
       {announcement && (
         <div className="w-full max-w-6xl mx-auto mb-6 bg-amber-50 border border-amber-100 rounded-2xl p-4 flex items-start gap-3 shadow-sm">
@@ -134,7 +210,7 @@ export default function Dashboard() {
         </div>
       )}
 
-      <header className="h-16 bg-slate-900 text-white flex items-center justify-between px-6 shrink-0 rounded-2xl shadow-md mb-4 max-w-6xl mx-auto w-full">
+      <header className="h-16 bg-slate-900 text-white flex items-center justify-between px-6 shrink-0 rounded-2xl shadow-md mb-8 max-w-6xl mx-auto w-full transition-colors border border-transparent">
         <div className="flex items-center gap-3">
           <div className="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center shadow-sm">
             <div className="w-4 h-4 border-2 border-white rotate-45 rounded-[2px]"></div>
@@ -148,6 +224,13 @@ export default function Dashboard() {
           >
             <Megaphone className="w-4 h-4" strokeWidth={2.5} />
             <span className="hidden sm:inline">Updates</span>
+          </Link>
+          <Link
+            href="/settings"
+            className="p-2 text-slate-400 hover:text-white hover:bg-slate-700 rounded-xl transition-all"
+            title="Settings"
+          >
+            <Settings className="w-5 h-5" strokeWidth={2.5} />
           </Link>
           {profile?.role === 'admin' && (
             <Link 
@@ -167,42 +250,35 @@ export default function Dashboard() {
         </div>
       </header>
 
-      <main className="flex-1 max-w-6xl mx-auto w-full">
-        <h2 className="text-[11px] font-black uppercase mb-6 border-b border-slate-200 pb-2 tracking-widest text-slate-500">
-          Available Modules
-        </h2>
+      <main className="flex-1 max-w-6xl mx-auto w-full flex flex-col gap-10">
         
-        {apps.length === 0 ? (
-          <div className="p-8 border border-slate-200 border-dashed rounded-2xl text-center text-slate-400 font-bold uppercase tracking-widest text-[11px]">
-            No active modules available right now.
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {apps.map((app) => (
-              <a
-                key={app.id}
-                href={app.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={(e) => handleAppClick(e, app)}
-                className="group bg-white border border-slate-100 rounded-2xl p-6 shadow-sm flex flex-col hover:shadow-md active:scale-95 transition-all cursor-pointer no-underline text-inherit"
-              >
-                <div className="w-16 h-16 bg-indigo-50 text-indigo-600 rounded-2xl mb-6 flex items-center justify-center group-hover:bg-indigo-600 group-hover:text-white transition-colors">
-                  <span className="font-black text-2xl">{app.short_icon}</span>
-                </div>
-                <h3 className="text-xl font-black uppercase leading-tight mb-2 tracking-tight text-slate-900">
-                  {app.name}
-                </h3>
-                <p className="text-sm font-medium text-slate-500 mb-4 leading-snug">
-                  {app.description}
-                </p>
-                <div className="mt-auto pt-4 flex items-center text-[11px] font-bold text-slate-400 uppercase tracking-widest group-hover:text-indigo-600 transition-colors">
-                  Launch App <ArrowRight className="w-4 h-4 ml-1" strokeWidth={2.5} />
-                </div>
-              </a>
-            ))}
-          </div>
+        {pinnedApps.length > 0 && (
+          <section>
+            <h2 className="text-[11px] font-black uppercase mb-6 border-b border-slate-200 pb-2 tracking-widest text-slate-500 flex items-center gap-2">
+              <Pin className="w-4 h-4" /> Favorites
+            </h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              {pinnedApps.map(app => <AppCard key={app.id} app={app} isPinned={true} />)}
+            </div>
+          </section>
         )}
+
+        <section>
+          <h2 className="text-[11px] font-black uppercase mb-6 border-b border-slate-200 pb-2 tracking-widest text-slate-500">
+            {pinnedApps.length > 0 ? "All Modules" : "Available Modules"}
+          </h2>
+          
+          {apps.length === 0 ? (
+            <div className="p-8 border border-slate-200 border-dashed rounded-2xl text-center text-slate-400 font-bold uppercase tracking-widest text-[11px]">
+              No active modules available right now.
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              {unpinnedApps.map(app => <AppCard key={app.id} app={app} isPinned={false} />)}
+            </div>
+          )}
+        </section>
+
       </main>
 
       {/* Footer */}
